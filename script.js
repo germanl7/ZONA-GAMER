@@ -10,7 +10,7 @@
   function saveRecords(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); renderRecords(); }
   function renderRecords(){
     $('#totalScore').textContent = records.score || 0; $('#gamesPlayed').textContent = records.played || 0;
-    const names = {reflejos:'Prueba de reflejos',memoria:'Memoria neón',numero:'Adivina el número',duelo:'Duelo relámpago'};
+    const names = {reflejos:'Prueba de reflejos',memoria:'Memoria neón',numero:'Adivina el número',duelo:'Duelo relámpago',tres:'Tres en raya',lluvia:'Lluvia de puntos',quiz:'Quiz gamer'};
     const entries = Object.entries(records.games || {}).sort((a,b)=>b[1].best-a[1].best);
     $('#recordList').innerHTML = entries.length ? entries.map(([id,r])=>'<div class="record-row"><span>'+names[id]+'</span><span>🏆 '+r.best+' pts</span><span>'+r.plays+' partida(s)</span></div>').join('') : '<div class="empty-record">🎯 Juega tu primera partida y aquí aparecerán tus récords.</div>';
   }
@@ -24,9 +24,9 @@
   function showToast(message){ toast.textContent=message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),2400); }
   function openModal(id){
     cleanup(); cleanup=()=>{}; activeGame=id; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('modal-open');
-    const names={reflejos:'PRUEBA DE REFLEJOS',memoria:'MEMORIA NEÓN',numero:'ADIVINA EL NÚMERO',duelo:'DUELO RELÁMPAGO'};
+    const names={reflejos:'PRUEBA DE REFLEJOS',memoria:'MEMORIA NEÓN',numero:'ADIVINA EL NÚMERO',duelo:'DUELO RELÁMPAGO',tres:'TRES EN RAYA',lluvia:'LLUVIA DE PUNTOS',quiz:'QUIZ GAMER'};
     modalTitle.textContent=names[id]; modalRecord.textContent=records.games?.[id]?.best||0; modalStatus.textContent='¡Buena suerte!';
-    ({reflejos:renderReflex,memoria:renderMemory,numero:renderNumber,duelo:renderDuel}[id] || renderReflex)();
+    ({reflejos:renderReflex,memoria:renderMemory,numero:renderNumber,duelo:renderDuel,tres:renderTicTacToe,lluvia:renderClickRush,quiz:renderQuiz}[id] || renderReflex)();
   }
   function closeModal(){ cleanup(); cleanup=()=>{}; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.classList.remove('modal-open'); }
   $('#modalClose').addEventListener('click',closeModal);
@@ -73,5 +73,41 @@
     $$('.duel-choice').forEach(b=>b.addEventListener('click',()=>play(b.dataset.choice)));
     $('#duelRestart').addEventListener('click',renderDuel);
   }
+
+  function renderTicTacToe(){
+    let board=Array(9).fill(''),turn='X',done=false,playerScore=0;
+    content.innerHTML='<p class="game-instructions">Haz tres en raya antes que la máquina. Tú eres ✕ y juegas primero.</p><div class="tic-board" id="ticBoard"></div><p class="game-message" id="ticMessage">Tu turno.</p><button class="game-action" id="ticRestart">NUEVA PARTIDA</button>';
+    const el=$('#ticBoard'),msg=$('#ticMessage');
+    const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    function winner(){for(const line of wins){const [a,b,c]=line;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return board[a];}return board.every(Boolean)?'empate':null;}
+    function draw(){el.innerHTML='';board.forEach((v,i)=>{const b=document.createElement('button');b.className='tic-cell';b.textContent=v;b.disabled=!!v||done;b.addEventListener('click',()=>move(i));el.appendChild(b);});}
+    function end(w){done=true;draw();if(w==='X'){msg.textContent='¡Ganaste! 🎉';finishGame('tres',500);}else if(w==='O'){msg.textContent='La máquina ganó. ¡Intenta otra vez!';finishGame('tres',100);}else{msg.textContent='¡Empate! Buena partida.';finishGame('tres',250);}}
+    function move(i){if(done||board[i])return;board[i]='X';let w=winner();if(w){end(w);return;}turn='O';msg.textContent='La máquina está pensando...';draw();setTimeout(()=>{if(done)return;let empties=board.map((v,j)=>v?null:j).filter(v=>v!==null);let choice=empties.find(j=>{board[j]='O';const win=winner()==='O';board[j]='';return win;});if(choice===undefined)choice=empties.find(j=>{board[j]='X';const block=winner()==='X';board[j]='';return block;});if(choice===undefined)choice=empties.includes(4)?4:empties[Math.floor(Math.random()*empties.length)];if(choice!==undefined)board[choice]='O';w=winner();if(w)end(w);else{turn='X';msg.textContent='Tu turno.';draw();}},350);}
+    function restart(){board=Array(9).fill('');turn='X';done=false;msg.textContent='Tu turno.';draw();}
+    $('#ticRestart').addEventListener('click',restart);draw();
+  }
+  function renderClickRush(){
+    let seconds=10,points=0,started=false,ended=false,interval;
+    content.innerHTML='<p class="game-instructions">Pulsa el botón tantas veces como puedas antes de que termine el tiempo.</p><div class="rush-timer" id="rushTimer">10</div><button class="rush-target" id="rushTarget">¡EMPEZAR!</button><p class="game-message" id="rushScore">Puntos: 0</p>';
+    const target=$('#rushTarget'),timer=$('#rushTimer'),score=$('#rushScore');
+    function finish(){ended=true;clearInterval(interval);target.disabled=true;target.textContent='¡TIEMPO!';finishGame('lluvia',points*10);}
+    target.addEventListener('click',()=>{if(ended)return;if(!started){started=true;target.textContent='¡PULSA!';interval=setInterval(()=>{seconds--;timer.textContent=seconds;if(seconds<=0)finish();},1000);return;}points++;score.textContent='Puntos: '+points;target.classList.remove('bop');void target.offsetWidth;target.classList.add('bop');});
+    cleanup=()=>clearInterval(interval);
+  }
+  function renderQuiz(){
+    const questions=[
+      {q:'¿Cuál de estos juegos permite crear experiencias con bloques?',a:['Roblox','Ajedrez','Tetris'],correct:0},
+      {q:'¿Qué significa FPS en videojuegos?',a:['Frames por segundo','Fichas por sala','Fuerza por salto'],correct:0},
+      {q:'¿Qué objeto se usa para controlar muchos juegos de consola?',a:['Control','Micrófono solamente','Impresora'],correct:0},
+      {q:'¿Qué tipo de juego es una trivia?',a:['Preguntas y respuestas','Carrera de autos','Rompecabezas físico'],correct:0},
+      {q:'¿Qué debes hacer para cuidar tus récords?',a:['Jugar y practicar','Compartir tu contraseña','Cerrar el juego siempre'],correct:0}
+    ];
+    let index=0,points=0,done=false;
+    content.innerHTML='<p class="game-instructions">Responde cinco preguntas y consigue puntos. ¡Vamos a ver cuánto sabes!</p><div id="quizQuestion" class="quiz-question"></div><div id="quizOptions" class="quiz-options"></div><p id="quizFeedback" class="game-message" aria-live="polite"></p>';
+    const qel=$('#quizQuestion'),opts=$('#quizOptions'),feedback=$('#quizFeedback');
+    function draw(){if(index>=questions.length){done=true;qel.textContent='¡Quiz terminado!';opts.innerHTML='<button class="game-action" id="quizAgain">JUGAR OTRA VEZ</button>';feedback.textContent='Resultado: '+points+' de '+questions.length+' respuestas correctas.';finishGame('quiz',points*200);$('#quizAgain').addEventListener('click',renderQuiz);return;}const q=questions[index];qel.textContent=(index+1)+'/'+questions.length+' · '+q.q;opts.innerHTML='';q.a.forEach((answer,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=answer;b.addEventListener('click',()=>{if(done)return;const ok=i===q.correct;if(ok)points++;feedback.textContent=ok?'¡Correcto! +1':'Casi. ¡Sigue!';index++;setTimeout(draw,450);});opts.appendChild(b);});}
+    draw();
+  }
+
   renderRecords();
 })();
