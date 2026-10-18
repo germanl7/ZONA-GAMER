@@ -80,7 +80,7 @@
     const el=$('#ticBoard'),msg=$('#ticMessage');
     const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     function winner(){for(const line of wins){const [a,b,c]=line;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return board[a];}return board.every(Boolean)?'empate':null;}
-    function draw(){el.innerHTML='';board.forEach((v,i)=>{const b=document.createElement('button');b.className='tic-cell';b.textContent=v;b.disabled=!!v||done;b.addEventListener('click',()=>move(i));el.appendChild(b);});}
+    function draw(){el.innerHTML='';board.forEach((v,i)=>{const b=document.createElement('button');b.className='tic-cell';b.textContent=v;b.disabled=!!v||done||turn!=='X';b.addEventListener('click',()=>move(i));el.appendChild(b);});}
     function end(w){done=true;draw();if(w==='X'){msg.textContent='¡Ganaste! 🎉';finishGame('tres',500);}else if(w==='O'){msg.textContent='La máquina ganó. ¡Intenta otra vez!';finishGame('tres',100);}else{msg.textContent='¡Empate! Buena partida.';finishGame('tres',250);}}
     function move(i){if(done||board[i])return;board[i]='X';let w=winner();if(w){end(w);return;}turn='O';msg.textContent='La máquina está pensando...';draw();setTimeout(()=>{if(done)return;let empties=board.map((v,j)=>v?null:j).filter(v=>v!==null);let choice=empties.find(j=>{board[j]='O';const win=winner()==='O';board[j]='';return win;});if(choice===undefined)choice=empties.find(j=>{board[j]='X';const block=winner()==='X';board[j]='';return block;});if(choice===undefined)choice=empties.includes(4)?4:empties[Math.floor(Math.random()*empties.length)];if(choice!==undefined)board[choice]='O';w=winner();if(w)end(w);else{turn='X';msg.textContent='Tu turno.';draw();}},350);}
     function restart(){board=Array(9).fill('');turn='X';done=false;msg.textContent='Tu turno.';draw();}
@@ -102,10 +102,10 @@
       {q:'¿Qué tipo de juego es una trivia?',a:['Preguntas y respuestas','Carrera de autos','Rompecabezas físico'],correct:0},
       {q:'¿Qué debes hacer para cuidar tus récords?',a:['Jugar y practicar','Compartir tu contraseña','Cerrar el juego siempre'],correct:0}
     ];
-    let index=0,points=0,done=false;
+    let index=0,points=0,done=false,answered=false;
     content.innerHTML='<p class="game-instructions">Responde cinco preguntas y consigue puntos. ¡Vamos a ver cuánto sabes!</p><div id="quizQuestion" class="quiz-question"></div><div id="quizOptions" class="quiz-options"></div><p id="quizFeedback" class="game-message" aria-live="polite"></p>';
     const qel=$('#quizQuestion'),opts=$('#quizOptions'),feedback=$('#quizFeedback');
-    function draw(){if(index>=questions.length){done=true;qel.textContent='¡Quiz terminado!';opts.innerHTML='<button class="game-action" id="quizAgain">JUGAR OTRA VEZ</button>';feedback.textContent='Resultado: '+points+' de '+questions.length+' respuestas correctas.';finishGame('quiz',points*200);$('#quizAgain').addEventListener('click',renderQuiz);return;}const q=questions[index];qel.textContent=(index+1)+'/'+questions.length+' · '+q.q;opts.innerHTML='';q.a.forEach((answer,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=answer;b.addEventListener('click',()=>{if(done)return;const ok=i===q.correct;if(ok)points++;feedback.textContent=ok?'¡Correcto! +1':'Casi. ¡Sigue!';index++;setTimeout(draw,450);});opts.appendChild(b);});}
+    function draw(){answered=false;if(index>=questions.length){done=true;qel.textContent='¡Quiz terminado!';opts.innerHTML='<button class="game-action" id="quizAgain">JUGAR OTRA VEZ</button>';feedback.textContent='Resultado: '+points+' de '+questions.length+' respuestas correctas.';finishGame('quiz',points*200);$('#quizAgain').addEventListener('click',renderQuiz);return;}const q=questions[index];qel.textContent=(index+1)+'/'+questions.length+' · '+q.q;opts.innerHTML='';q.a.forEach((answer,i)=>{const b=document.createElement('button');b.className='quiz-option';b.textContent=answer;b.addEventListener('click',()=>{if(done||answered)return;answered=true;const ok=i===q.correct;if(ok)points++;feedback.textContent=ok?'¡Correcto! +1':'Casi. ¡Sigue!';index++;setTimeout(draw,450);});opts.appendChild(b);});}
     draw();
   }
 
