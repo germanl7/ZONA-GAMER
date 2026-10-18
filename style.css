@@ -15,3 +15,20 @@
 .gallery-tile:hover img{transform:scale(1.07);filter:saturate(1.35) brightness(1)}
 @media(max-width:760px){.visual-gallery{padding-top:60px;padding-bottom:65px}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:160px;gap:10px}.gallery-tile.gallery-large{grid-row:span 2}.gallery-tile span{left:11px;bottom:12px}.gallery-tile b{font-size:9px}.gallery-tile small{font-size:13px}}
 @media(max-width:420px){.gallery-grid{grid-auto-rows:135px}.gallery-tile.gallery-large{grid-row:span 2}}
+
+
+/* EFECTOS ARCADE: movimiento, brillo y tarjetas gamer */
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.16;background-image:linear-gradient(rgba(49,245,237,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(49,245,237,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 82%)}
+.ambient-one{animation:ambientDrift 13s ease-in-out infinite alternate}.ambient-two{animation:ambientDrift 16s ease-in-out infinite alternate-reverse}
+@keyframes ambientDrift{from{transform:translate3d(0,0,0) scale(.92)}to{transform:translate3d(35px,45px,0) scale(1.12)}}
+.hero-image-frame{animation:heroFloat 6s ease-in-out infinite}
+@keyframes heroFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+.game-card{position:relative;overflow:hidden}.game-card:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 25%,#b6ff3b14 50%,transparent 75%);transform:translateX(-100%);transition:opacity .25s;z-index:2}
+.game-card:hover:before{opacity:1;animation:cardSweep .9s ease}
+@keyframes cardSweep{to{transform:translateX(100%)}}
+.game-brand img{filter:saturate(1.2) contrast(1.05)}.valorant-tile{border-color:#ff536655}.valorant-tile b{color:#ff788b}.freefire-tile{border-color:#ffb23f66}.freefire-tile b{color:#ffbd5d}.roblox-tile{border-color:#ffffff55}.roblox-tile b{color:#ffffff}
+.reaction-pad.go{animation:greenPulse .65s ease-in-out infinite alternate}
+@keyframes greenPulse{to{box-shadow:0 0 45px #b6ff3b77;transform:scale(1.01)}}
+.game-action,.play-link,.filter-btn,.category-card{-webkit-tap-highlight-color:transparent}
+.game-action:active,.duel-choice:active,.memory-card:active{transform:scale(.96)}
+@media(prefers-reduced-motion:reduce){.ambient-one,.ambient-two,.hero-image-frame,.reaction-pad.go{animation:none}}
