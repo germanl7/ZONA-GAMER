@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080914">
+  <meta name="description" content="ZONA GAMER: minijuegos, desafíos, récords y diversión online.">
+  <title>ZONA GAMER — Juega sin límites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="ZONA GAMER inicio"><span class="brand-mark">ZG</span><span>ZONA<span class="brand-accent">GAMER</span><small>PLAY • COMPETE • REPEAT</small></span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="nav" id="nav">
+      <a class="nav-link active" href="#inicio">Inicio</a><a class="nav-link" href="#juegos">Juegos</a><a class="nav-link" href="#categorias">Categorías</a><a class="nav-link" href="#records">Récords</a>
+    </nav>
+    <a class="top-cta" href="#juegos">¡JUGAR AHORA! <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero section-wrap" id="inicio">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> TU PRÓXIMA PARTIDA EMPIEZA AQUÍ</div>
+        <h1>ENTRA A LA<br><span>ZONA</span> <em>GAMER</em></h1>
+        <p class="hero-text">Desafía tus reflejos. Entrena tu mente. Rompe tus récords. Tu próxima victoria está a un clic.</p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#juegos">▶ EXPLORAR JUEGOS</a><a class="btn btn-ghost" href="#categorias">VER CATEGORÍAS <span>↘</span></a></div>
+        <div class="hero-stats"><div><strong>04</strong><span>MINIJUEGOS</span></div><i></i><div><strong>∞</strong><span>INTENTOS</span></div><i></i><div><strong>100%</strong><span>ADRENALINA</span></div></div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-image-frame"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85" alt="Setup gamer con luces de colores" fetchpriority="high"><div class="image-shade"></div><div class="image-caption"><span class="caption-icon">✦</span><div><strong>READY PLAYER ONE</strong><small>EL SIGUIENTE NIVEL TE ESPERA</small></div></div></div>
+        <div class="floating-chip chip-top">⚡ REFLEJOS ACTIVADOS</div><div class="floating-chip chip-bottom"><span class="live-dot"></span> MODO ARCADE <b>ON</b></div>
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="Lema"><div>JUEGA <b>★</b> COMPITE <b>★</b> SUPÉRATE <b>★</b> REPITE <b>★</b> JUEGA <b>★</b> COMPITE <b>★</b> SUPÉRATE <b>★</b> REPITE <b>★</b></div></section>
+
+    <section class="section-wrap games-section" id="juegos">
+      <div class="section-heading"><div><div class="eyebrow">SELECCIONA TU DESAFÍO</div><h2>ELIGE TU <span>JUEGO</span></h2></div><label class="search-box"><span>⌕</span><input id="gameSearch" type="search" placeholder="Buscar juego..." aria-label="Buscar juego"></label></div>
+      <div class="filter-row" id="filterRow"><button class="filter-btn selected" data-filter="todos">Todos los juegos</button><button class="filter-btn" data-filter="habilidad">Habilidad</button><button class="filter-btn" data-filter="mente">Mente</button><button class="filter-btn" data-filter="arcade">Arcade</button></div>
+      <div class="game-grid" id="gameGrid">
+        <article class="game-card" data-category="habilidad" data-name="prueba de reflejos reflejos velocidad"><div class="game-cover cover-reflex"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=700&q=80" alt="Control de videojuegos iluminado" loading="lazy"><span class="game-tag">HABILIDAD</span><span class="cover-symbol">⚡</span></div><div class="game-info"><div><h3>Prueba de reflejos</h3><p>¿Qué tan rápidos son tus dedos?</p></div><span class="game-number">01</span></div><button class="play-link" data-game="reflejos">JUGAR AHORA <span>↗</span></button></article>
+        <article class="game-card" data-category="mente" data-name="memoria parejas concentración"><div class="game-cover cover-memory"><img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=700&q=80" alt="Consola gamer con luces neón" loading="lazy"><span class="game-tag">MENTE</span><span class="cover-symbol">◈</span></div><div class="game-info"><div><h3>Memoria neón</h3><p>Encuentra todas las parejas.</p></div><span class="game-number">02</span></div><button class="play-link" data-game="memoria">JUGAR AHORA <span>↗</span></button></article>
+        <article class="game-card" data-category="arcade" data-name="adivina el número lógica"><div class="game-cover cover-number"><img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=700&q=80" alt="Pantalla de juego con ambiente oscuro" loading="lazy"><span class="game-tag">ARCADE</span><span class="cover-symbol">?</span></div><div class="game-info"><div><h3>Adivina el número</h3><p>Descubre el número secreto.</p></div><span class="game-number">03</span></div><button class="play-link" data-game="numero">JUGAR AHORA <span>↗</span></button></article>
+        <article class="game-card" data-category="arcade" data-name="piedra papel tijera duelo"><div class="game-cover cover-duel"><img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=700&q=80" alt="Persona jugando videojuegos" loading="lazy"><span class="game-tag">DUELO</span><span class="cover-symbol">✊</span></div><div class="game-info"><div><h3>Duelo relámpago</h3><p>Piedra, papel o tijera.</p></div><span class="game-number">04</span></div><button class="play-link" data-game="duelo">JUGAR AHORA <span>↗</span></button></article>
+      </div>
+      <p class="no-results" id="noResults" hidden>No encontramos juegos con esa búsqueda. Prueba con otra palabra.</p>
+    </section>
+
+    <section class="category-section" id="categorias"><div class="section-wrap"><div class="section-heading"><div><div class="eyebrow">ENCUENTRA TU ESTILO</div><h2>¿QUÉ VAS A <span>DOMINAR?</span></h2></div><p class="heading-note">Cada partida es una oportunidad<br>para superar tu mejor marca.</p></div><div class="category-grid">
+      <button class="category-card cat-green" data-category-filter="habilidad"><span class="cat-icon">⚡</span><span><strong>HABILIDAD</strong><small>Reflejos y precisión</small></span><b>↗</b></button>
+      <button class="category-card cat-purple" data-category-filter="mente"><span class="cat-icon">◈</span><span><strong>MENTE</strong><small>Memoria y estrategia</small></span><b>↗</b></button>
+      <button class="category-card cat-blue" data-category-filter="arcade"><span class="cat-icon">▣</span><span><strong>ARCADE</strong><small>Desafíos rápidos</small></span><b>↗</b></button>
+    </div></div></section>
+
+    <section class="section-wrap records-section" id="records"><div class="records-panel"><div><div class="eyebrow">TU PROGRESO, TU HISTORIA</div><h2>ROMPE TUS <span>RÉCORDS</span></h2><p>Las mejores puntuaciones de esta sesión quedan guardadas en este navegador. ¡Vuelve y trata de superarlas!</p></div><div class="record-stats"><div class="record-box"><span>🏆</span><strong id="totalScore">0</strong><small>PUNTOS TOTALES</small></div><div class="record-box"><span>🎮</span><strong id="gamesPlayed">0</strong><small>PARTIDAS JUGADAS</small></div></div></div><div class="record-list" id="recordList"><div class="empty-record">🎯 Juega tu primera partida y aquí aparecerán tus récords.</div></div><button class="reset-records" id="resetRecords">Reiniciar récords guardados</button></section>
+  </main>
+
+  <footer class="footer"><a class="brand footer-brand" href="#inicio"><span class="brand-mark">ZG</span><span>ZONA<span class="brand-accent">GAMER</span><small>PLAY • COMPETE • REPEAT</small></span></a><p>Hecho para quienes viven el juego. <span>♥</span></p><a href="#inicio" class="back-top">VOLVER ARRIBA ↑</a></footer>
+
+  <div class="modal-backdrop" id="gameModal" aria-hidden="true"><section class="game-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="Cerrar juego">×</button><div class="modal-eyebrow">ZONA GAMER ARCADE</div><h2 id="modalTitle">MINIJUEGO</h2><div id="gameContent" class="game-content"></div><div class="modal-footer"><span>🏆 Récord: <b id="modalRecord">0</b></span><span id="modalStatus">¡Buena suerte!</span></div></section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
